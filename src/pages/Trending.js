@@ -1,8 +1,9 @@
 import Card from "@/components/Card"
 import Navbar from "@/components/Navbar"
 
+const URL = "https://newsapi.org/v2/everything?q=india&from=2023-06-01&sortBy=publishedAt&apiKey=4b8ba1584d8746f8b21d076444d7e604"
 
-const Index = () => {
+const Index = ({newsArticles}) => {
     return (
         <>
             <Navbar/>
@@ -18,20 +19,24 @@ const Index = () => {
             </div>
             <center>
             <div className=" grid gap-4 grid-cols-1 grid-rows-3 px-10 md:grid-cols-2  lg:grid-cols-3">
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
+            {newsArticles.map((article)=>{
+                return <Card props= {article} />
+            })}
             </div>
             </center>
         </>
     )
+}
+
+export const getServerSideProps = async () => {
+    const response = await fetch("https://newsapi.org/v2/everything?q=india&from=2023-06-02&sortBy=popularity&apiKey=4b8ba1584d8746f8b21d076444d7e604");
+    const data = await response.json();
+
+    return {
+        props:{
+            newsArticles:data.articles,
+        },
+    }
 }
 
 export default Index
